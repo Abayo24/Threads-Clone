@@ -2,7 +2,7 @@
   "expo": {
     "name": "Threads",
     "slug": "Threads",
-    "scheme": "my_threads",
+    "scheme": "my-threads",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
