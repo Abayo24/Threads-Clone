@@ -1,3 +1,4 @@
+import "../../global.css"
 import { Slot, Stack } from 'expo-router';
 
 import { ThemeProvider, DarkTheme } from '@react-navigation/native';
@@ -7,6 +8,7 @@ const myTheme = {
     colors: {
         ...DarkTheme.colors,
         primary: 'white',
+        card: '#101010',
     },
 };
 
