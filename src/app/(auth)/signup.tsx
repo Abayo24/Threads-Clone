@@ -1,0 +1,70 @@
+import { View, Text, TextInput, Pressable, ActivityIndicator } from 'react-native';
+import { useState } from 'react';
+import { Link } from 'expo-router';
+
+export default function SignupScreen() {
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = () => {
+    setLoading(true);
+    // Simulate async signup
+    setTimeout(() => setLoading(false), 1500);
+  };
+
+  return (
+    <View className="flex-1 bg-black justify-center px-6">
+      <Text className="text-white text-3xl font-bold mb-8 text-center">Create an Account</Text>
+      <TextInput
+        className="bg-neutral-900 text-white px-4 py-3 rounded-lg mb-4"
+        placeholder="Name"
+        placeholderTextColor="#888"
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        className="bg-neutral-900 text-white px-4 py-3 rounded-lg mb-4"
+        placeholder="Username"
+        placeholderTextColor="#888"
+        autoCapitalize="none"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        className="bg-neutral-900 text-white px-4 py-3 rounded-lg mb-4"
+        placeholder="Email"
+        placeholderTextColor="#888"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        className="bg-neutral-900 text-white px-4 py-3 rounded-lg mb-6"
+        placeholder="Password"
+        placeholderTextColor="#888"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <Pressable
+        className={`bg-white py-3 rounded-lg mb-4 ${loading ? 'opacity-60' : ''}`}
+        onPress={handleSignup}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text className="text-black text-center font-semibold">Sign Up</Text>
+        )}
+      </Pressable>
+      <View className="flex-row justify-center mt-2">
+        <Text className="text-neutral-400">Already have an account? </Text>
+        <Link href="/login" className="text-white font-semibold">Login</Link>
+      </View>
+    </View>
+  );
+}
