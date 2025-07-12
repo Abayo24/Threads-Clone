@@ -1,13 +1,35 @@
-import { View, Text, TextInput, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Pressable, ActivityIndicator, Alert } from 'react-native';
 import { useState } from 'react';
 import { Link } from 'expo-router';
+import { supabase } from '@/lib/superbase';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  async function signInWithEmail() {
+    setLoading(true)
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    })
+    if (error) Alert.alert(error.message)
+    setLoading(false)
+  }
+
   const handleLogin = () => {
+    if(!email || !password) {
+        Alert.alert('Please enter an email and password');
+        return;
+    }
+
+    try {
+        signInWithEmail();
+    } catch (error) {
+        console.error('Login error:', error);
+        Alert.alert('Login error:', String(error));
+    }
     setLoading(true);
     // Simulate async login
     setTimeout(() => setLoading(false), 1500);

@@ -1,6 +1,7 @@
-import { View, Text, TextInput, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Pressable, ActivityIndicator, Alert } from 'react-native';
 import { useState } from 'react';
 import { Link } from 'expo-router';
+import { supabase } from '@/lib/superbase';
 
 export default function SignupScreen() {
   const [name, setName] = useState('');
@@ -9,30 +10,37 @@ export default function SignupScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  async function signUpWithEmail() {
+    setLoading(true)
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({email: email,password: password});
+
+    if (error) Alert.alert(error.message);
+    if (!session) Alert.alert('Please check your inbox for email verification!');
+  }
+
   const handleSignup = () => {
-    setLoading(true);
-    // Simulate async signup
-    setTimeout(() => setLoading(false), 1500);
+    if(!email || !password) {
+        Alert.alert('Please enter an email and password');
+        return;
+    }
+    try{
+        signUpWithEmail();
+    } catch (error) {
+        console.error('Login error:', error);
+    }
+    finally{
+        setLoading(false);
+    }
+    
   };
 
   return (
     <View className="flex-1 bg-black justify-center px-6">
       <Text className="text-white text-3xl font-bold mb-8 text-center">Create an Account</Text>
-      <TextInput
-        className="bg-neutral-900 text-white px-4 py-3 rounded-lg mb-4"
-        placeholder="Name"
-        placeholderTextColor="#888"
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        className="bg-neutral-900 text-white px-4 py-3 rounded-lg mb-4"
-        placeholder="Username"
-        placeholderTextColor="#888"
-        autoCapitalize="none"
-        value={username}
-        onChangeText={setUsername}
-      />
+      
       <TextInput
         className="bg-neutral-900 text-white px-4 py-3 rounded-lg mb-4"
         placeholder="Email"
